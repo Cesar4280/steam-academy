@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IMC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h3>Indice de Masa Corporal (IMC)</h3>
+        <form name="body-mass-index" class="form-container" action="#" method="post" autocomplete="off">
+            <div class="input-container">
+                <label for="weight">Peso</label>
+                <input type="text" name="weight" id="weight" placeholder="Digite su Peso (Kilogramos)" required>
+            </div>
+            <div class="input-container">
+                <label for="height">Estatura</label>
+                <input type="text" name="height" id="height" placeholder="Digite su estatura (Metros)" required>
+            </div>
+            <input type="submit" name="calculate" id="calculate" value="CALCULAR">
+        </form>
+        <div id="show-results"></div>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>
