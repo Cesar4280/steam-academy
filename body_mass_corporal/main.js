@@ -42,15 +42,14 @@ class BMC {
     }
     #setBodyMassIndex() { return this.#weight / this.#height ** 2; }
     #determineCategoryIndex() {
-        let categoryIndex = 8;
+        let categoryIndex = 7;
         if (this.#bodyMassIndex < 16) categoryIndex = 0;
         else if (this.#bodyMassIndex < 17) categoryIndex = 1;
-        else if (this.#bodyMassIndex < 17) categoryIndex = 2;
-        else if (this.#bodyMassIndex < 18.5) categoryIndex = 3;
-        else if (this.#bodyMassIndex < 25) categoryIndex = 4;
-        else if (this.#bodyMassIndex < 30) categoryIndex = 5;
-        else if (this.#bodyMassIndex < 35) categoryIndex = 6;
-        else if (this.#bodyMassIndex < 40) categoryIndex = 7;
+        else if (this.#bodyMassIndex < 18.5) categoryIndex = 2;
+        else if (this.#bodyMassIndex < 25) categoryIndex = 3;
+        else if (this.#bodyMassIndex < 30) categoryIndex = 4;
+        else if (this.#bodyMassIndex < 35) categoryIndex = 5;
+        else if (this.#bodyMassIndex < 40) categoryIndex = 6;
         return categoryIndex;
     }
 

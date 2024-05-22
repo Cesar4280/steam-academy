@@ -94,7 +94,6 @@ img {
     height: 18.75rem;
 }
 
-
 @media (max-width: 576px) {
     .container {
         width: 20rem;
