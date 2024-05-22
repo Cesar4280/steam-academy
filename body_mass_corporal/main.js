@@ -7,12 +7,15 @@ const outputResult = document.getElementById("show-results");
 // HANDLE EVENTS
 const handleSubmit = event => event.preventDefault();
 const handleClick = () => {
-    const BodyMassIndexPerson = new BMC(Number(inputWeight.value), Number(inputHeight.value));
-    const { BODY_MASS_INDEX, CATEGORY_NAME, IMAGE_PATH } = BodyMassIndexPerson.getResults();
-    outputResult.innerHTML = `
+    const weight = inputWeight.value, height = inputHeight.value;
+    if (weight?.length && height?.length) {
+        const BodyMassIndexPerson = new BMC(Number(weight), Number(height));
+        const { BODY_MASS_INDEX, CATEGORY_NAME, IMAGE_PATH } = BodyMassIndexPerson.getResults();
+        outputResult.innerHTML = `
         <h3>${CATEGORY_NAME.toUpperCase()}</h3>
         <img alt="${CATEGORY_NAME}" src="${IMAGE_PATH}">
         <h4>IMC: ${BODY_MASS_INDEX.toFixed(2)} kg/m<sup>2</sup></h4>`;
+    }
 };
 // LISTEN EVENTS
 formBodyMassIndex.addEventListener("submit", handleSubmit);
@@ -77,9 +80,11 @@ class BMC {
     }
 };
 
+/*
 const person = new BMC(65, 1.72);
 person.setHeight(1.75);
 person.setWeight(66);
 console.log(person.getWeight());
 console.log(person.getHeight());
 console.log(person.getBodyMassIndex());
+*/
