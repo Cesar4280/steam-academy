@@ -23,13 +23,14 @@ class BMC {
     #height;
     #bodyMassIndex;
     static #CATEGORIES = Object.freeze([
-        "Severe Thinness",
-        "Moderate Thinness",
-        "Mild Thinness", "Normal",
-        "Overweight",
-        "Obese Class I",
-        "Obese Class II",
-        "Obese Class III"
+        "Delgadez Severa",
+        "Delgadez Moderada",
+        "Delgadez Leve",
+        "Normal",
+        "Sobrepeso",
+        "Obesidad Clase I",
+        "Obesidad Clase II",
+        "Obesidad Clase III"
     ]);
     constructor(weight = 0, height = 1) {
         this.#weight = weight;
