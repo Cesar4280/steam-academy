@@ -53,24 +53,8 @@ Algoritmo SteamAcademy
 			4:
 				Escribir "Digite un a�o en formato YYYY: ";
 				Leer x;
-				Definir esBisiesto Como Logico;
-				
-				Si x MOD 4 == 0 Entonces
-					Si x MOD 100 == 0 Entonces
-						Si x MOD 400 == 0 Entonces
-							Escribir "El A�o ", x, " Es Bisiesto";
-						SiNo
-							Escribir "El A�o ", x, " No Es Bisiesto";
-						FinSi
-					SiNo
-						Escribir "El A�o ", x, " Es Bisiesto";
-					FinSi
-				SiNo
-					Escribir "El A�o ", x, " No Es Bisiesto";
-				FinSi
-				
-				// X % 4 == 0 & X % 100 <> 0
-				// X % 100 == 0 & X % 400 == 0
+
+				Escribir "¿El A�o ", x, " Es Bisiesto? ", x MOD 400 = 0 O (x MOD 4 = 0 Y x MOD 100 <> 0);
 			5:
 				Escribir "Digite un N�mero Entero: ";
 				Leer a;
@@ -84,29 +68,29 @@ Algoritmo SteamAcademy
 					FinSi
 				FinSi
 			6:
-				Escribir "Digite El N�mero A: ";
+				Escribir "Digite El N1: ";
 				Leer a;
-				Escribir "Digite El N�mero B: ";
+				Escribir "Digite El N2: ";
 				Leer b;
-				Escribir "Digite El N�mero C: ";
+				Escribir "Digite El N3: ";
 				Leer c;
 				Si a > b Y a > c Entonces
-					Escribir "El N�mero A=", a, " es el Mayor";
+					Escribir "El N1=", a, " es el Mayor";
 				SiNo
 					Si b > a Y b > c Entonces
-						Escribir "El N�mero B=", b, " es el Mayor";
+						Escribir "El N2=", b, " es el Mayor";
 					SiNo
 						Si c > a Y c > b Entonces
-							Escribir "El N�mero C=", c, " es el Mayor";
+							Escribir "El N3=", c, " es el Mayor";
 						SiNo
 							Si a == b Y a > c Entonces
-								Escribir "Los N�meros A=", a, " y B=", b, " son los Mayores";
+								Escribir "Los N�meros N1=", a, " y N2=", b, " son los Mayores";
 							SiNo
 								Si a == c Y a > b Entonces
-									Escribir "Los N�meros A=", a, " y C=", c, " son los Mayores";
+									Escribir "Los N�meros N1=", a, " y N3=", c, " son los Mayores";
 								SiNo
 									Si b == c Y b > a Entonces
-										Escribir "Los N�meros B=", b, " y C=", c, " son los Mayores";
+										Escribir "Los N�meros N2=", b, " y N3=", c, " son los Mayores";
 									SiNo
 										Escribir "Los N�meros Son Iguales";
 									FinSi
