@@ -25,6 +25,7 @@ class BMC {
     #weight;
     #height;
     #bodyMassIndex;
+    static #LIMITS = Object.freeze([16, 17, 18.5, 25, 30, 35, 40]);
     static #CATEGORIES = Object.freeze([
         "Delgadez Severa",
         "Delgadez Moderada",
@@ -40,17 +41,11 @@ class BMC {
         this.#height = height;
         this.#bodyMassIndex = this.#setBodyMassIndex();
     }
+
     #setBodyMassIndex() { return this.#weight / this.#height ** 2; }
     #determineCategoryIndex() {
-        let categoryIndex = 7;
-        if (this.#bodyMassIndex < 16) categoryIndex = 0;
-        else if (this.#bodyMassIndex < 17) categoryIndex = 1;
-        else if (this.#bodyMassIndex < 18.5) categoryIndex = 2;
-        else if (this.#bodyMassIndex < 25) categoryIndex = 3;
-        else if (this.#bodyMassIndex < 30) categoryIndex = 4;
-        else if (this.#bodyMassIndex < 35) categoryIndex = 5;
-        else if (this.#bodyMassIndex < 40) categoryIndex = 6;
-        return categoryIndex;
+        const FOUND_INDEX = BMC.#LIMITS.findIndex(limit => this.#bodyMassIndex < limit);
+        return FOUND_INDEX === -1 ? BMC.#LIMITS.length : FOUND_INDEX;
     }
 
     setWeight(weight) {
@@ -78,12 +73,3 @@ class BMC {
         });
     }
 };
-
-/*
-const person = new BMC(65, 1.72);
-person.setHeight(1.75);
-person.setWeight(66);
-console.log(person.getWeight());
-console.log(person.getHeight());
-console.log(person.getBodyMassIndex());
-*/
