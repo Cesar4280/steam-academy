@@ -6,17 +6,17 @@ const CONTROL_KEYS = Object.freeze([
 ]);
 const normalizeFloatString = input => Number(input.value.replace(",", "."));
 // DOM Elements
-const $formDOM = document.forms.namedItem("body-mass-index");
-const $inputsDOM = [...$formDOM.elements];
-const $outputResultDOM = document.getElementById("show-results");
+const bodyMassIndexForm = document.forms.namedItem("body-mass-index");
+const textInputs = Array.from(bodyMassIndexForm.elements);
+const calculateButton = textInputs.pop();
+const outputResultDiv = document.getElementById("show-results");
 // HANDLE EVENTS
 const handleSubmit = event => {
     event.preventDefault();
-    const weight = normalizeFloatString(inputWeight);
-    const height = normalizeFloatString(inputHeight);
-    const bodyMassIndexPerson = new BMC(weight, height);
+    const bodyMassIndexParams = textInputs.map(normalizeFloatString);
+    const bodyMassIndexPerson = new BMC(...bodyMassIndexParams);
     const { BODY_MASS_INDEX, CATEGORY_NAME, IMAGE_PATH } = bodyMassIndexPerson.getResults();
-    $outputResultDOM.innerHTML = `
+    outputResultDiv.innerHTML = `
         <h3>${CATEGORY_NAME.toUpperCase()}</h3>
         <img alt="${CATEGORY_NAME}" src="${IMAGE_PATH}">
         <h4>IMC: ${BODY_MASS_INDEX.toLocaleString("es-CO")} kg/m<sup>2</sup></h4>`;
@@ -33,11 +33,11 @@ const handleBlur = event => {
     text.at(-1) === "," && (text = text.slice(0, -1));
 }
 // LISTEN EVENTS
-formBodyMassIndex.addEventListener("submit", handleSubmit);
-inputWeight.addEventListener("keydown", handleKeydown);
-inputHeight.addEventListener("keydown", handleKeydown);
-inputWeight.addEventListener("blur", handleBlur);
-inputHeight.addEventListener("blur", handleBlur);
+bodyMassIndexForm.addEventListener("submit", handleSubmit);
+textInputs.forEach(input => {
+    input.addEventListener("keydown", handleKeydown);
+    input.addEventListener("blur", handleBlur);
+});
 // POO
 class BMC {
     #weight;
