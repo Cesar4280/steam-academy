@@ -1,42 +1,43 @@
 // CONSTANTS
+const DIGIT_OR_COMMA_PATTERN = /[\d,]/;
 const CONTROL_KEYS = Object.freeze([
     "Backspace", "Delete", "Tab", "Escape", "Enter",
     "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"
 ]);
-const DIGIT_OR_COMMA_PATTERN = /[\d,]/;
 const normalizeFloatString = input => Number(input.value.replace(",", "."));
 // DOM Elements
-const formBodyMassIndex = document.forms.namedItem("body-mass-index");
-const inputWeight = formBodyMassIndex.elements.namedItem("weight");
-const inputHeight = formBodyMassIndex.elements.namedItem("height");
-const buttonCalculate = formBodyMassIndex.elements.namedItem("calculate");
-const outputResult = document.getElementById("show-results");
+const $formDOM = document.forms.namedItem("body-mass-index");
+const $inputsDOM = [...$formDOM.elements];
+const $outputResultDOM = document.getElementById("show-results");
 // HANDLE EVENTS
 const handleSubmit = event => {
     event.preventDefault();
     const weight = normalizeFloatString(inputWeight);
     const height = normalizeFloatString(inputHeight);
-    if (weight && height) {
-        const BodyMassIndexPerson = new BMC(weight, height);
-        const { BODY_MASS_INDEX, CATEGORY_NAME, IMAGE_PATH } = BodyMassIndexPerson.getResults();
-        outputResult.innerHTML = `
+    const bodyMassIndexPerson = new BMC(weight, height);
+    const { BODY_MASS_INDEX, CATEGORY_NAME, IMAGE_PATH } = bodyMassIndexPerson.getResults();
+    $outputResultDOM.innerHTML = `
         <h3>${CATEGORY_NAME.toUpperCase()}</h3>
         <img alt="${CATEGORY_NAME}" src="${IMAGE_PATH}">
-        <h4>IMC: ${BODY_MASS_INDEX.toFixed(2)} kg/m<sup>2</sup></h4>`;
-    } else {
-        outputResult.innerHTML = "<p style='color: red;'>Por favor, llene los campos númericos con datos creibles!<p>";
-    }
-    console.log(`Weight=${weight} height:${height}`);
+        <h4>IMC: ${BODY_MASS_INDEX.toLocaleString("es-CO")} kg/m<sup>2</sup></h4>`;
+    console.log(`Weight=${weight} height:${height} IMC: ${BODY_MASS_INDEX}`);
 };
-const handleKeydown = event => { // ALLOW ONLY DIGITS OR COMMA IN TEXT INPUTS
+const handleKeydown = event => { // ALLOW ONLY DIGITS OR COMMA TO BE ENTERED IN TEXT INPUTS
     DIGIT_OR_COMMA_PATTERN.test(event.key)
         || CONTROL_KEYS.includes(event.key)
         || event.preventDefault();
 };
+const handleBlur = event => {
+    let text = event.target.value;
+    text.charAt(0) === "," && (text = text.slice(1));
+    text.at(-1) === "," && (text = text.slice(0, -1));
+}
 // LISTEN EVENTS
 formBodyMassIndex.addEventListener("submit", handleSubmit);
-inputWeight.addEventListener("keydown", handleKeydown)
+inputWeight.addEventListener("keydown", handleKeydown);
 inputHeight.addEventListener("keydown", handleKeydown);
+inputWeight.addEventListener("blur", handleBlur);
+inputHeight.addEventListener("blur", handleBlur);
 // POO
 class BMC {
     #weight;
