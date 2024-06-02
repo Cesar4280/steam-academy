@@ -1,3 +1,10 @@
+// CONSTANTS
+const CONTROL_KEYS = Object.freeze([
+    "Backspace", "Delete", "Tab", "Escape", "Enter",
+    "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"
+]);
+const DIGIT_OR_COMMA_PATTERN = /[\d,]/;
+const normalizeFloatString = input => Number(input.value.replace(",", "."));
 // DOM Elements
 const formBodyMassIndex = document.forms.namedItem("body-mass-index");
 const inputWeight = formBodyMassIndex.elements.namedItem("weight");
@@ -5,21 +12,31 @@ const inputHeight = formBodyMassIndex.elements.namedItem("height");
 const buttonCalculate = formBodyMassIndex.elements.namedItem("calculate");
 const outputResult = document.getElementById("show-results");
 // HANDLE EVENTS
-const handleSubmit = event => event.preventDefault();
-const handleClick = () => {
-    const weight = inputWeight.value, height = inputHeight.value;
-    if (weight?.length && height?.length) {
-        const BodyMassIndexPerson = new BMC(Number(weight), Number(height));
+const handleSubmit = event => {
+    event.preventDefault();
+    const weight = normalizeFloatString(inputWeight);
+    const height = normalizeFloatString(inputHeight);
+    if (weight && height) {
+        const BodyMassIndexPerson = new BMC(weight, height);
         const { BODY_MASS_INDEX, CATEGORY_NAME, IMAGE_PATH } = BodyMassIndexPerson.getResults();
         outputResult.innerHTML = `
         <h3>${CATEGORY_NAME.toUpperCase()}</h3>
         <img alt="${CATEGORY_NAME}" src="${IMAGE_PATH}">
         <h4>IMC: ${BODY_MASS_INDEX.toFixed(2)} kg/m<sup>2</sup></h4>`;
+    } else {
+        outputResult.innerHTML = "<p style='color: red;'>Por favor, llene los campos númericos con datos creibles!<p>";
     }
+    console.log(`Weight=${weight} height:${height}`);
+};
+const handleKeydown = event => { // ALLOW ONLY DIGITS OR COMMA IN TEXT INPUTS
+    DIGIT_OR_COMMA_PATTERN.test(event.key)
+        || CONTROL_KEYS.includes(event.key)
+        || event.preventDefault();
 };
 // LISTEN EVENTS
 formBodyMassIndex.addEventListener("submit", handleSubmit);
-buttonCalculate.addEventListener("click", handleClick);
+inputWeight.addEventListener("keydown", handleKeydown)
+inputHeight.addEventListener("keydown", handleKeydown);
 // POO
 class BMC {
     #weight;
