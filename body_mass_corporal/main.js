@@ -20,7 +20,6 @@ const handleSubmit = event => {
         <h3>${CATEGORY_NAME.toUpperCase()}</h3>
         <img alt="${CATEGORY_NAME}" src="${IMAGE_PATH}">
         <h4>IMC: ${BODY_MASS_INDEX.toLocaleString("es-CO")} kg/m<sup>2</sup></h4>`;
-    console.log(`Weight=${weight} height:${height} IMC: ${BODY_MASS_INDEX}`);
 };
 const handleKeydown = event => { // ALLOW ONLY DIGITS OR COMMA TO BE ENTERED IN TEXT INPUTS
     DIGIT_OR_COMMA_PATTERN.test(event.key)
