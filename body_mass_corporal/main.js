@@ -1,5 +1,6 @@
 // CONSTANTS
 const DIGIT_OR_COMMA_PATTERN = /[\d,]/;
+const POSITIVE_REAL_NUMBER_PATTERN = /^(?!0+(?:,0+)?$)\d+(?:,\d+)?$/;
 const CONTROL_KEYS = Object.freeze([
     "Backspace", "Delete", "Tab", "Escape", "Enter",
     "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"
@@ -26,10 +27,9 @@ const handleKeydown = event => { // ALLOW ONLY DIGITS OR COMMA TO BE ENTERED IN 
         || CONTROL_KEYS.includes(event.key)
         || event.preventDefault();
 };
-const handleBlur = event => {
-    let text = event.target.value;
-    text.charAt(0) === "," && (text = text.slice(1));
-    text.at(-1) === "," && (text = text.slice(0, -1));
+const handleBlur = event => { // CLEAN INPUT IF IT'S NOT A VALID NUMBER (HEIGHT OR WIEGHT)
+    POSITIVE_REAL_NUMBER_PATTERN.test(event.target.value)
+        || (event.target.value = "");
 }
 // LISTEN EVENTS
 bodyMassIndexForm.addEventListener("submit", handleSubmit);

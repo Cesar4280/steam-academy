@@ -14,11 +14,11 @@
         <form name="body-mass-index" class="form-container" action="#" method="post" autocomplete="off">
             <div class="input-container">
                 <label for="weight">Peso</label>
-                <input type="text" name="weight" id="weight" placeholder="Digite su Peso (Kilogramos)" pattern="^(?!0$|0,0*$)\d+(?:,\d+)?$" title="Números positivos con o sin parte decimal. Ejemplo: 67,52 o 72" required />
+                <input type="text" name="weight" id="weight" placeholder="Digite su Peso (Kilogramos)" pattern="^(?!0+(?:,0+)?$)\d+(?:,\d+)?$" title="Cantidad positiva con o sin parte decimal. Ejemplo: 67,52 o 72" required />
             </div>
             <div class="input-container">
                 <label for="height">Estatura</label>
-                <input type="text" name="height" id="height" placeholder="Digite su estatura (Metros)" pattern="^(?!0$|0,0*$)\d+(?:,\d+)?$" title="Números positivos con o sin parte decimal. Ejemplo: 1,72 o 2" required />
+                <input type="text" name="height" id="height" placeholder="Digite su estatura (Metros)" pattern="^(?!0+(?:,0+)?$)\d+(?:,\d+)?$" title="Cantidad positivas con o sin parte decimal. Ejemplo: 1,72 o 2" required />
             </div>
             <button type="submit" name="calculate" id="calculate">CALCULAR</button>
         </form>
