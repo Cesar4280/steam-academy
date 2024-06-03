@@ -28,9 +28,11 @@ const handleKeydown = event => { // ALLOW ONLY DIGITS OR COMMA TO BE ENTERED IN 
         || event.preventDefault();
 };
 const handleBlur = event => { // CLEAN INPUT IF IT'S NOT A VALID NUMBER (HEIGHT OR WIEGHT)
-    POSITIVE_REAL_NUMBER_PATTERN.test(event.target.value)
-        || (event.target.value = "");
-}
+    event.target.value = POSITIVE_REAL_NUMBER_PATTERN.test(event.target.value)
+        ? new Intl.NumberFormat("es-CO", { useGrouping: false })
+            .format(Number(event.target.value.replace(",", ".")))
+        : ""
+};
 // LISTEN EVENTS
 bodyMassIndexForm.addEventListener("submit", handleSubmit);
 textInputs.forEach(input => {
