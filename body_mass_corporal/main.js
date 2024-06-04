@@ -1,38 +1,43 @@
 // CONSTANTS
 const DIGIT_OR_COMMA_PATTERN = /[\d,]/;
 const POSITIVE_REAL_NUMBER_PATTERN = /^(?!0+(?:,0+)?$)\d+(?:,\d+)?$/;
-const CONTROL_KEYS = Object.freeze([
-    "Backspace", "Delete", "Tab", "Escape", "Enter",
-    "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"
-]);
-const normalizeFloatString = input => Number(input.value.replace(",", "."));
-// DOM Elements
-const bodyMassIndexForm = document.forms.namedItem("body-mass-index");
-const textInputs = Array.from(bodyMassIndexForm.elements);
-const calculateButton = textInputs.pop();
-const outputResultDiv = document.getElementById("show-results");
-// HANDLE EVENTS
-const handleSubmit = event => {
-    event.preventDefault();
-    const bodyMassIndexParams = textInputs.map(normalizeFloatString);
-    const bodyMassIndexPerson = new BMC(...bodyMassIndexParams);
-    const { BODY_MASS_INDEX, CATEGORY_NAME, IMAGE_PATH } = bodyMassIndexPerson.getResults();
+const CONTROL_KEYS = Object.freeze(["Backspace", "Delete", "Tab", "Escape", "Enter", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]);
+const LANGUAGE_LOCALE = "es-CO";
+// UTILS
+const normalizeCommaSeparator = input => Number(input.value.replace(",", "."));
+const cleanContent = element => { element.innerHTML && (element.innerHTML = ""); };
+const generateReport = (weight = 68.45, height = 1.72) => {
+    const personBodyMassIndex = new BMC(weight, height);
+    const { BODY_MASS_INDEX, CATEGORY_NAME, IMAGE_PATH } = personBodyMassIndex.getResults();
     outputResultDiv.innerHTML = `
         <h3>${CATEGORY_NAME.toUpperCase()}</h3>
         <img alt="${CATEGORY_NAME}" src="${IMAGE_PATH}">
-        <h4>IMC: ${BODY_MASS_INDEX.toLocaleString("es-CO")} kg/m<sup>2</sup></h4>`;
+        <h4>IMC: ${BODY_MASS_INDEX.toLocaleString(LANGUAGE_LOCALE)} kg/m<sup>2</sup></h4>`;
 };
-const handleKeydown = event => { // ALLOW ONLY DIGITS OR COMMA TO BE ENTERED IN TEXT INPUTS
+// DOM Elements
+const bodyMassIndexForm = document.forms.namedItem("body-mass-index");
+const textInputs = [...bodyMassIndexForm.elements];
+const calculateButton = textInputs.pop();
+const outputResultDiv = document.getElementById("show-results");
+// HANDLE EVENTS
+function handleSubmit(event) { // CALCULATE BMC RESULTS AND DISPLAY THEM IN THE VIEW
+    event.preventDefault();
+    const bodyMassIndexParams = textInputs.map(normalizeCommaSeparator);
+    generateReport(...bodyMassIndexParams);
+}
+function handleKeydown(event) { // ALLOW ONLY DIGITS OR COMMA TO BE ENTERED IN TEXT INPUTS
     DIGIT_OR_COMMA_PATTERN.test(event.key)
         || CONTROL_KEYS.includes(event.key)
         || event.preventDefault();
-};
-const handleBlur = event => { // CLEAN INPUT IF IT'S NOT A VALID NUMBER (HEIGHT OR WIEGHT)
+}
+function handleBlur(event) { // CLEAN INPUT IF IT'S NOT A VALID NUMBER AND LIMIT THE NUMBER OF DECIMAL PLACES.
     event.target.value = POSITIVE_REAL_NUMBER_PATTERN.test(event.target.value)
-        ? new Intl.NumberFormat("es-CO", { useGrouping: false })
-            .format(Number(event.target.value.replace(",", ".")))
-        : ""
-};
+        ? new Intl.NumberFormat(LANGUAGE_LOCALE, { useGrouping: false })
+            .format(normalizeCommaSeparator(event.target))
+        : "";
+    event.target.value === "0" && (event.target.value = "");
+    cleanContent(outputResultDiv);
+}
 // LISTEN EVENTS
 bodyMassIndexForm.addEventListener("submit", handleSubmit);
 textInputs.forEach(input => {
@@ -71,7 +76,6 @@ class BMC {
         this.#weight = weight;
         this.#setBodyMassIndex();
     }
-
     setHeight(height) {
         this.#height = height;
         this.#setBodyMassIndex();
@@ -80,9 +84,7 @@ class BMC {
     getWeight() { return this.#weight; }
     getHeight() { return this.#height; }
     getBodyMassIndex() { return this.#bodyMassIndex; }
-
     getCategory() { return BMC.#CATEGORIES[this.#determineCategoryIndex()]; }
-
     getResults() {
         const CATEGORY_INDEX = this.#determineCategoryIndex();
         return Object.freeze({
